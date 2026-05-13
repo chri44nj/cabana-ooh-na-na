@@ -117,13 +117,12 @@ så er det lettere at se det som en separat del af appen -->
           />
         </UFormField>
 
-        <UFormField label="Spacing" name="spacing">
-          <URadioGroup
-            v-model="layoutStore.spacing"
-            :items="spacingOptions"
-            orientation="horizontal"
-          />
-        </UFormField>
+        <URadioGroup
+          v-model="layoutStore.spacing"
+          :items="spacingOptions"
+          legend="Spacing"
+          orientation="horizontal"
+        />
 
         <UFormField
           v-if="showContentFirst"
@@ -145,17 +144,13 @@ så er det lettere at se det som en separat del af appen -->
           <USwitch v-model="layoutStore.showSearch" />
         </UFormField>
 
-        <UFormField
+        <URadioGroup
           v-if="layoutStore.showSearch"
-          label="Søgebar størrelse"
-          name="searchSize"
-        >
-          <URadioGroup
-            v-model="layoutStore.searchSize"
-            :items="searchOptions"
-            orientation="horizontal"
-          />
-        </UFormField>
+          v-model="layoutStore.searchSize"
+          :items="searchOptions"
+          legend="Søgebar størrelse"
+          orientation="horizontal"
+        />
       </div>
 
       <div class="flex flex-col gap-3">

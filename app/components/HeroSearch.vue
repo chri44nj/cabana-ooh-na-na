@@ -76,12 +76,6 @@ const handleSubmit = async () => {
       q: searchQuery,
     },
   });
-
-  await nextTick();
-
-  document
-    .getElementById("search-results")
-    ?.scrollIntoView({ behavior: "smooth" });
 };
 
 const selectSuggestion = (suggestion: string) => {

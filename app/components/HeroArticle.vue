@@ -60,7 +60,7 @@ const {
         <NuxtLink
           v-for="link in item.links"
           :key="link.url"
-          href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1"
+          :href="link.url"
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-1 text-sm font-medium hover:underline"
