@@ -66,7 +66,7 @@ const burgerOpen = ref(false);
       <UButton
         aria-label="Åbn burgermenu"
         :aria-expanded="burgerOpen"
-        class="flex flex-col gap-1 sm:hidden"
+        class="flex flex-col gap-1 sm:hidden bg-transparent active:bg-transparent"
         @click="burgerOpen = !burgerOpen"
       >
         <span v-for="i in 3" :key="i" class="w-8 h-1 bg-(--color-primary)" />

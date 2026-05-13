@@ -14,7 +14,7 @@ const {
 
 <template>
   <article
-    class="w-full max-w-xl bg-(--color-secondary) text-(--color-primary) rounded-2xl overflow-hidden transition-all duration-300 flex flex-col"
+    class="w-full h-full max-w-xl bg-(--color-secondary) text-(--color-primary) rounded-2xl overflow-hidden transition-all duration-300 flex flex-col"
   >
     <div
       v-if="showMedia && (item.image || item.video)"
@@ -44,7 +44,7 @@ const {
       />
     </div>
 
-    <div class="flex flex-col gap-3 p-6">
+    <div class="flex flex-col gap-2 p-6">
       <h2 class="text-xl font-semibold leading-snug">
         {{ item.title }}
       </h2>
@@ -55,7 +55,7 @@ const {
 
       <div
         v-if="showLinks && item.links?.length"
-        class="flex flex-wrap gap-2 mt-1"
+        class="flex flex-wrap gap-4 mt-1"
       >
         <NuxtLink
           v-for="link in item.links"
@@ -69,7 +69,7 @@ const {
 
           <Icon
             name="material-symbols:arrow-right-alt-rounded"
-            class="w-3.5 h-3.5"
+            class="text-2xl"
           />
         </NuxtLink>
       </div>
