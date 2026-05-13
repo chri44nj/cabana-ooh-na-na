@@ -1,0 +1,89 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --neutral-primary: #f0ede5;
+  --neutral-secondary: #1f1f1c;
+  --neutral-tertiary: #161616;
+  --neutral-surface: #d3cfc3;
+  --neutral-border: #d7d2c8;
+
+  --header-height: 6rem;
+}
+
+/** Neutral **/
+[data-theme="neutral"] {
+  --color-primary: var(--neutral-primary);
+  --color-secondary: var(--neutral-secondary);
+  --color-tertiary: var(--neutral-tertiary);
+  --color-surface: var(--neutral-surface);
+  --color-border: var(--neutral-border);
+}
+
+/** Forest **/
+[data-theme="forest"] {
+  --color-primary: #2b4d3d;
+  --color-secondary: #f4f8f5;
+  --color-tertiary: #ffffff;
+  --color-surface: #297450;
+  --color-border: #c8d5cd;
+}
+
+/** Ocean **/
+[data-theme="ocean"] {
+  --color-primary: #295b74;
+  --color-secondary: #f3f8fb;
+  --color-tertiary: #ffffff;
+  --color-surface: rgb(21, 74, 100);
+  --color-border: #c8d8df;
+}
+
+/** Sunset **/
+[data-theme="sunset"] {
+  --color-primary: #a65d45;
+  --color-secondary: #fff4ef;
+  --color-tertiary: #ffffff;
+  --color-surface: #8b4229;
+  --color-border: #e6c8bb;
+}
+
+/** Midnight **/
+[data-theme="midnight"] {
+  --color-primary: #181c24;
+  --color-secondary: #f3f5f7;
+  --color-tertiary: #ffffff;
+  --color-surface: #232936;
+  --color-border: #394150;
+}
+
+/** Nordic **/
+[data-theme="nordic"] {
+  --color-primary: #dfe7ea;
+  --color-secondary: #243038;
+  --color-tertiary: #1b2328;
+  --color-surface: #f7fafb;
+  --color-border: #c4d0d6;
+}
+
+/** Sand **/
+[data-theme="sand"] {
+  --color-primary: #d8c7a8;
+  --color-secondary: #2f261d;
+  --color-tertiary: #1f1a14;
+  --color-surface: #f7f1e7;
+  --color-border: #dccdb9;
+}
+
+/** Plum **/
+[data-theme="plum"] {
+  --color-primary: #5a3b52;
+  --color-secondary: #faf5f8;
+  --color-tertiary: #ffffff;
+  --color-surface: #915081;
+  --color-border: #d9c8d3;
+}
+
+/** Generel CSS **/
+p {
+  max-width: 60ch;
+}
