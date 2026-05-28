@@ -24,7 +24,7 @@ const burgerOpen = ref(false);
         src="/forrest-logo.webp"
         class="h-[75%] transition-all duration-500"
         :class="{ invert: currentTheme?.logoInvert }"
-        alt="Logo for Skov Kommune depicting a forest"
+        alt="Skov Kommunes logo, der forestiller et stort træ i blomstring"
       />
       {{ title }}
     </NuxtLink>

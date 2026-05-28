@@ -7,7 +7,9 @@
   --neutral-tertiary: #161616;
   --neutral-surface: #d3cfc3;
   --neutral-border: #d7d2c8;
-
+  --neutral-success: #81c784;
+  --neutral-warning: #ffb74d;
+  --neutral-error: #e57373;
   --header-height: 6rem;
 }
 

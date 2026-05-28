@@ -14,6 +14,8 @@ export type HeroSpacing = "small" | "medium" | "large";
 
 export type HeroSearch = "small" | "medium" | "large";
 
+export type HeroBackgroundMedia = "image" | "video";
+
 export interface LayoutState {
   settingsVisible: boolean;
   showHeader: boolean;
@@ -26,4 +28,6 @@ export interface LayoutState {
   showSecondaryArticle: boolean;
   showLinks: boolean;
   showMedia: boolean;
+  showBackgroundMedia: boolean;
+  backgroundMediaType: HeroBackgroundMedia;
 }

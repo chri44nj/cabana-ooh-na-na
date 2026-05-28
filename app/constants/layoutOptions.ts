@@ -3,6 +3,7 @@ import type {
   HeroTheme,
   HeroSpacing,
   HeroSearch,
+  HeroBackgroundMedia,
 } from "~/types/layout";
 
 export const layoutOptions: {
@@ -29,6 +30,21 @@ export const themeOptions: {
   logoInvert: boolean;
 }[] = [
   {
+    label: "Blomme",
+    value: "plum",
+    logoInvert: false,
+  },
+  {
+    label: "Hav",
+    value: "ocean",
+    logoInvert: false,
+  },
+  {
+    label: "Midnat",
+    value: "midnight",
+    logoInvert: false,
+  },
+  {
     label: "Neutral",
     value: "neutral",
     logoInvert: true,
@@ -39,33 +55,18 @@ export const themeOptions: {
     logoInvert: true,
   },
   {
-    label: "Skov",
-    value: "forest",
-    logoInvert: false,
-  },
-  {
-    label: "Hav",
-    value: "ocean",
-    logoInvert: false,
-  },
-  {
-    label: "Solnedgang",
-    value: "sunset",
-    logoInvert: false,
-  },
-  {
-    label: "Midnat",
-    value: "midnight",
-    logoInvert: false,
-  },
-  {
     label: "Sand",
     value: "sand",
     logoInvert: true,
   },
   {
-    label: "Blomme",
-    value: "plum",
+    label: "Skov",
+    value: "forest",
+    logoInvert: false,
+  },
+  {
+    label: "Solnedgang",
+    value: "sunset",
     logoInvert: false,
   },
 ];
@@ -103,5 +104,19 @@ export const searchOptions: {
   {
     label: "Large",
     value: "large",
+  },
+];
+
+export const backgroundMediaOptions: {
+  label: string;
+  value: HeroBackgroundMedia;
+}[] = [
+  {
+    label: "Billede",
+    value: "image",
+  },
+  {
+    label: "Video",
+    value: "video",
   },
 ];

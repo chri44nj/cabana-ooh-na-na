@@ -1,75 +1,11 @@
-# Nuxt Minimal Starter
+** Behøves en hero på forsiden overhovedet? Hvad er alternativet? **
+Nej, det gør der ikke. Der er imidlertid mange der forventer det og det er en måde at vise sin visuelle identitet på. Og en hero kan jo være mange ting. Når jeg forestiller mig en hero, er det første jeg tænker på en forside med noget visuelt fangende, virksomheden (eller kommunens) navn, deres slogan/catch phrase og et Call to Action. I de eksempler I har sendt er heroen i større grad defineret ved et billede og en søgefunktion, og i visse tilfælde nogle quicklinks. Om der skal være en hero eller ej, eller man skal kigge i alternativer, kommer meget an på casen. I denne case har jeg valgt at lave en rimelig simpel hero med dataen fra jeres API, og valgt at fokusere på at give brugeren en masse frihed til at rykke rundt på layoutet i heroen, så det præcis samme indhold kan se ud på mange forskellige måder. Jeg har struktureret kodearkitekturen med omhu og tænkt over at genbruge komponenter og logik hvor jeg kunne, sørget for at løsningen har tilgængelighed tænkt med i sig fra bunden af og tilføjet en gimmick der gør at I selv kan sidde og lege med layoutet på selve sitet, som om I var en af jeres kunder der sad og gjorde det på Umbraco. Performance-wise har jeg optimeret billederne med NuxtImg (format gjort til webp), men de tunge assets fra jeres API kommer uden cache headers, så der er et loft for hvad jeg kan gøre i frontenden - så det udsætter jeg til en anden god gang 😆
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+** Hvordan gør man mulighederne mange, men lader kunder differentiere sig inden for det samme komponent? **
+Kort sagt skal man give kunden adgang til en slags interface, hvor de kan justere på forskellige indstillinger, der i koden konditionelt renderer indholdet på en bestemt måde, afhængig af de givne indstillinger. I min case her jeg kodet komponentet LayoutSettings.vue (gimmicken), der gør at man på selve sitet kan simulere de handlinger, en kunde kunne foretage sig i backenden på eksempelvis Umbraco, så man kan se ændringerne i realtime. Det tænkte jeg var den simpleste måde at vise jer min grundforståelse for og bud på, hvilke indstillinger der kunne være relevante, når det kom til at lade kunderne differentiere sig inden for samme komponent. Jeg har AI-generet farver til en række temaer, lavet 3 forskellige layouts (default, split og minimalistisk) og så en række andre settings og toggles, der tilsammen gør at man kan få rigtig mange forskellige udtryk frem, med et relativt simpelt setup.
 
-## Setup
+** Skal søgebaren være i heroen, eller kan den placeres/fremhæves anderledes? **
+Tænker det er ret fedt som minimum at have en search bar et eller andet sted; det vigtigste er at den er let at finde og let at bruge. Hvis søgninger er noget man forventer at brugeren ofte vil gøre på forsiden, giver det super mening at have den i heroen. Hvis søgninger har en mindre rolle på sitet (og forsiden generelt), kan man overveje at flytte den til headeren, så man let kan tilgå den men den ikke fylder for meget. Jeg har givet kunden adgang til at toggle search barens visibilitet og sørget for at vise en (ufunktionel) søgefunktion i headeren, hvis man fjerner den fra heroen, så der er et fallback og de ikke kan komme til at fjerne det helt ved en fejl. Det er en af de måder man kan sætte systemet defensivt op, så kunden (der sandsynligvis ved mindre om UI- og UX design end os, ikke kan fucke noget kritisk op).
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+** Hvad skal komponenten kunne når den bor på en fællesplatform hvor hver kunde har egne design tokens men deler komponenterne? **
+Den skal kunne se forskellig ud, fra andre kunders komponenter, uden at være forskellig indeni. Det er best case scenario for os, så vi ikke behøver lave en masse custom løsninger, men kan overlade differentieringsdelen til kunden selv - og det tror jeg i øvrigt også er en frihed, de sætter pris på. Det er sådan noget vi kan gøre med custom CSS properties og design tokens, fordi komponenterne ikke arbejder med hardcodede farver og værdier, men i stedet ændrer sig overalt på én gang, når en design token ændres. Så når en kunde skifter tema, opdateres hele komponenten automatisk, og når en kunde toggler eller justerer på andre indstillinger, har vi allerede sat logikken op for, hvordan det i praksis vil ændre sig ☺️

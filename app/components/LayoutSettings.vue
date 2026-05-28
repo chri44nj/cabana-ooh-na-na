@@ -4,6 +4,7 @@ import {
   themeOptions,
   spacingOptions,
   searchOptions,
+  backgroundMediaOptions,
 } from "~/constants/layoutOptions";
 
 const panel = ref<HTMLElement | null>(null);
@@ -42,6 +43,18 @@ const showContentFirst = computed(() => {
     !(layoutStore.layout === "default" && !layoutStore.showSearch)
   );
 });
+
+const canHideHeader = computed(() => layoutStore.showSearch);
+const canHideHeroSearch = computed(() => layoutStore.showHeader);
+
+watch(
+  () => [layoutStore.showHeader, layoutStore.showSearch],
+  ([showHeader, showSearch]) => {
+    if (!showHeader && !showSearch) {
+      layoutStore.showSearch = true;
+    }
+  },
+);
 </script>
 
 <template>
@@ -103,7 +116,20 @@ så er det lettere at se det som en separat del af appen -->
             }"
           />
         </UFormField>
+        <UFormField label="Billede som baggrund" name="showBackgroundMedia">
+          <USwitch v-model="layoutStore.showBackgroundMedia" />
+        </UFormField>
+
+        <URadioGroup
+          v-if="layoutStore.showBackgroundMedia"
+          v-model="layoutStore.backgroundMediaType"
+          :items="backgroundMediaOptions"
+          legend="Baggrundstype"
+          orientation="horizontal"
+        />
       </div>
+
+      <UIDivider />
 
       <div class="flex flex-col gap-3">
         <h3 class="font-bold uppercase">Layout</h3>
@@ -133,15 +159,35 @@ så er det lettere at se det som en separat del af appen -->
         </UFormField>
 
         <UFormField label="Vis header" name="showHeader">
-          <USwitch v-model="layoutStore.showHeader" />
+          <p
+            v-if="!canHideHeader"
+            class="text-xs my-2 text-(--neutral-warning)"
+          >
+            Headeren kan ikke skjules, når søgefeltet i heroen er slået fra.
+          </p>
+          <USwitch
+            v-model="layoutStore.showHeader"
+            :disabled="!canHideHeader"
+          />
         </UFormField>
       </div>
+
+      <UIDivider />
 
       <div class="flex flex-col gap-3">
         <h3 class="font-bold uppercase">Søgning</h3>
 
         <UFormField label="Vis søgefelt i hero" name="showSearch">
-          <USwitch v-model="layoutStore.showSearch" />
+          <p
+            v-if="!canHideHeroSearch"
+            class="text-xs my-2 text-(--neutral-warning)"
+          >
+            Søgefeltet kan ikke skjules, når headeren er slået fra.
+          </p>
+          <USwitch
+            v-model="layoutStore.showSearch"
+            :disabled="!canHideHeroSearch"
+          />
         </UFormField>
 
         <URadioGroup
@@ -153,32 +199,23 @@ så er det lettere at se det som en separat del af appen -->
         />
       </div>
 
-      <div class="flex flex-col gap-3">
+      <UIDivider v-if="layoutStore.layout !== 'minimal'" />
+
+      <div class="flex flex-col gap-3" v-if="layoutStore.layout !== 'minimal'">
         <h3 class="font-bold uppercase">Artikler</h3>
 
-        <UFormField
-          v-if="layoutStore.layout !== 'minimal'"
-          label="Vis medier i artikler"
-          name="showMedia"
-        >
+        <UFormField label="Vis medier i artikler" name="showMedia">
           <USwitch v-model="layoutStore.showMedia" />
         </UFormField>
 
-        <UFormField
-          v-if="layoutStore.layout !== 'minimal'"
-          label="Vis links i artikler"
-          name="showLinks"
-        >
+        <UFormField label="Vis links i artikler" name="showLinks">
           <USwitch v-model="layoutStore.showLinks" />
         </UFormField>
-        <UFormField
-          v-if="layoutStore.layout !== 'minimal'"
-          label="Vis sekundær artikel"
-          name="showSecondaryArticle"
-        >
+        <UFormField label="Vis sekundær artikel" name="showSecondaryArticle">
           <USwitch v-model="layoutStore.showSecondaryArticle" />
         </UFormField>
       </div>
+
       <UButton type="button" block @click="layoutStore.resetSettings()">
         Nulstil
       </UButton>

@@ -6,19 +6,22 @@ const { data } = defineProps<{
 }>();
 
 const layoutStore = useLayoutStore();
+const preferredMotion = usePreferredReducedMotion();
+
+const allArticles = computed<ArticleItem[]>(() =>
+  data.items.filter((item): item is ArticleItem => item.type === "article"),
+);
 
 const articles = computed<ArticleItem[]>(() => {
-  const filteredArticles = data.items.filter(
-    (item): item is ArticleItem => item.type === "article",
-  );
-
   return layoutStore.showSecondaryArticle
-    ? filteredArticles
-    : filteredArticles.slice(0, 1);
+    ? allArticles.value
+    : allArticles.value.slice(0, 1);
 });
 
 const primaryArticle = computed(() => articles.value[0]);
 const secondaryArticle = computed(() => articles.value[1]);
+const firstApiArticle = computed(() => allArticles.value[0]);
+const secondApiArticle = computed(() => allArticles.value[1]);
 
 const searchItem = computed<SearchItem | undefined>(() =>
   data.items.find((item): item is SearchItem => item.type === "search"),
@@ -58,6 +61,21 @@ const h1Class = computed(() => {
   }
 });
 
+const backgroundImage = computed(() => firstApiArticle.value?.image);
+const backgroundVideo = computed(() => secondApiArticle.value?.video);
+
+const hasBackgroundMedia = computed(() => {
+  if (!layoutStore.showBackgroundMedia) return false;
+
+  return layoutStore.backgroundMediaType === "video"
+    ? !!backgroundVideo.value
+    : !!backgroundImage.value;
+});
+
+const shouldPlayBackgroundVideo = computed(
+  () => preferredMotion.value !== "reduce",
+);
+
 const activeIndex = ref(0);
 
 const handleArticleSlides = (direction: "previous" | "next") => {
@@ -84,11 +102,44 @@ watch(
 
 <template>
   <section
-    class="w-full bg-(--color-primary) text-(--color-secondary) transition-colors duration-500 flex flex-col justify-center p-4 sm:p-8"
+    class="w-full bg-(--color-primary) text-(--color-secondary) transition-colors duration-500 flex flex-col justify-center p-4 sm:p-8 relative overflow-hidden"
     :class="[spacingClass, heightBasedOnHeaderClass]"
   >
+    <template v-if="hasBackgroundMedia">
+      <video
+        v-if="layoutStore.backgroundMediaType === 'video' && backgroundVideo"
+        :src="backgroundVideo.url"
+        :poster="backgroundVideo.poster"
+        class="absolute inset-0 h-full w-full object-cover"
+        aria-hidden="true"
+        :autoplay="shouldPlayBackgroundVideo"
+        muted
+        :loop="shouldPlayBackgroundVideo"
+        playsinline
+      />
+
+      <NuxtImg
+        v-else-if="backgroundImage"
+        :src="backgroundImage.url"
+        alt=""
+        format="webp"
+        quality="80"
+        sizes="100vw"
+        class="absolute inset-0 h-full w-full object-cover"
+        aria-hidden="true"
+      />
+
+      <div
+        class="absolute inset-0 bg-(--color-primary)/50"
+        aria-hidden="true"
+      />
+    </template>
+
     <template v-if="layoutStore.layout === 'default'">
-      <div class="flex flex-col items-center" :class="spacingClass">
+      <div
+        class="relative z-10 flex flex-col items-center"
+        :class="spacingClass"
+      >
         <h1 :class="h1Class">
           {{ data.meta.municipality }}
         </h1>
@@ -128,7 +179,7 @@ watch(
 
     <template v-else-if="layoutStore.layout === 'split'">
       <div
-        class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
+        class="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center"
         :class="spacingClass"
       >
         <div
@@ -230,7 +281,7 @@ watch(
 
     <template v-else-if="layoutStore.layout === 'minimal'">
       <div
-        class="flex flex-col items-center justify-center"
+        class="relative z-10 flex flex-col items-center justify-center"
         :class="spacingClass"
       >
         <h1 :class="h1Class">

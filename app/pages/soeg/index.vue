@@ -7,7 +7,7 @@ const searchQuery = computed(() => route.query.q || "");
 </script>
 
 <template>
-  <section
+  <main
     id="search-results"
     :data-theme="layoutStore.theme"
     class="h-screen w-full bg-(--color-secondary) text-(--color-primary) flex flex-col items-center justify-center gap-4 p-4 sm:p-8 text-center"
@@ -26,5 +26,5 @@ const searchQuery = computed(() => route.query.q || "");
     >
       Tilbage til forsiden
     </NuxtLink>
-  </section>
+  </main>
 </template>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ArticleItem } from "~/types/api";
 
+const layoutStore = useLayoutStore();
+
 const {
   item,
   showMedia = true,
@@ -10,6 +12,36 @@ const {
   showMedia?: boolean;
   showLinks?: boolean;
 }>();
+
+const videoRef = ref<HTMLVideoElement | null>(null);
+
+const preferredMotion = usePreferredReducedMotion();
+
+const shouldAutoplay = computed(() => {
+  return (
+    preferredMotion.value !== "reduce" &&
+    (!layoutStore.showBackgroundMedia ||
+      layoutStore.backgroundMediaType !== "video")
+  );
+});
+
+const syncVideoPlayback = async () => {
+  await nextTick();
+
+  if (!videoRef.value) return;
+
+  if (shouldAutoplay.value) {
+    await videoRef.value.play().catch(() => {});
+  } else {
+    videoRef.value.pause();
+  }
+};
+
+onMounted(syncVideoPlayback);
+
+watch([shouldAutoplay, () => item.video?.url], syncVideoPlayback, {
+  flush: "post",
+});
 </script>
 
 <template>
@@ -22,11 +54,12 @@ const {
     >
       <video
         v-if="item.video"
+        ref="videoRef"
         :src="item.video.url"
         :poster="item.video.poster"
         :title="item.video.alt"
         class="w-full h-full object-cover"
-        autoplay
+        :autoplay="shouldAutoplay"
         muted
         loop
         playsinline

@@ -87,9 +87,11 @@ const selectSuggestion = (suggestion: string) => {
   <div class="w-full" :class="searchInputSize">
     <label :for="searchId" class="sr-only"> Søg på hjemmesiden </label>
 
-    <div
+    <form
+      role="search"
       class="flex items-center flex-col sm:flex-row gap-2"
       :class="searchRowClass"
+      @submit.prevent="handleSubmit"
     >
       <UInputMenu
         :id="searchId"
@@ -102,7 +104,7 @@ const selectSuggestion = (suggestion: string) => {
         :placeholder="item.search.placeholder"
         class="flex-1 h-full w-full"
         :ui="{
-          base: 'h-full w-full rounded-2xl bg-(--color-secondary) text-(--color-primary) placeholder:text-(--color-primary) ring-(--color-primary) focus-visible:ring-(--color-surface)',
+          base: 'h-full w-full rounded-2xl bg-(--color-secondary) text-(--color-primary) placeholder:text-(--color-primary) ring-transparent focus-visible:ring-(--color-surface)',
           leadingIcon: 'text-(--color-primary)',
           trailingIcon: 'text-(--color-primary)',
           trailingClear: 'text-(--color-primary) hover:text-(--color-surface)',
@@ -116,18 +118,16 @@ const selectSuggestion = (suggestion: string) => {
         }"
         clear
         @blur="open = false"
-        @keyup.enter="handleSubmit"
       />
 
       <UButton
         label="Søg"
-        type="button"
+        type="submit"
         :aria-label="`Søg efter ${query || 'indhold'}`"
         class="h-full px-8 rounded-2xl sm:w-auto w-full justify-center bg-transparent border-(--color-secondary) focus-visible:text-(--color-primary) focus-visible:bg-(--color-secondary) border text-(--color-secondary) hover:text-(--color-primary) hover:bg-(--color-secondary) active:bg-(--color-primary) focus-visible:outline-none"
         :size="searchInputNuxtSize"
-        @click="handleSubmit"
       />
-    </div>
+    </form>
     <span :id="`${searchId}-shortcuts-label`" class="sr-only">
       Hurtige søgeforslag
     </span>
