@@ -123,7 +123,7 @@ watch(
         :src="backgroundImage.url"
         alt=""
         format="webp"
-        quality="80"
+        quality="65"
         sizes="100vw"
         class="absolute inset-0 h-full w-full object-cover"
         aria-hidden="true"

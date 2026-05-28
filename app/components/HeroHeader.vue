@@ -22,6 +22,10 @@ const burgerOpen = ref(false);
     <NuxtLink class="flex items-center gap-2 h-full font-bold text-lg" href="/">
       <NuxtImg
         src="/forrest-logo.webp"
+        format="webp"
+        width="90"
+        height="72"
+        sizes="72px"
         class="h-[75%] transition-all duration-500"
         :class="{ invert: currentTheme?.logoInvert }"
         alt="Skov Kommunes logo, der forestiller et stort træ i blomstring"

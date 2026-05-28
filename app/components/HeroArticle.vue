@@ -70,10 +70,9 @@ watch([shouldAutoplay, () => item.video?.url], syncVideoPlayback, {
         :src="item.image.url"
         :alt="item.image.alt"
         format="webp"
-        quality="80"
-        sizes="sm:100vw md:50vw lg:600px"
+        quality="75"
+        sizes="320px sm:520px md:50vw lg:600px"
         class="w-full h-full object-cover"
-        loading="lazy"
       />
     </div>
 
