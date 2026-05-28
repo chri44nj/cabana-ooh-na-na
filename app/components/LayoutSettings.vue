@@ -197,6 +197,14 @@ så er det lettere at se det som en separat del af appen -->
           legend="Søgebar størrelse"
           orientation="horizontal"
         />
+
+        <UFormField
+          v-if="layoutStore.showSearch"
+          label="Nudging"
+          name="searchNudging"
+        >
+          <USwitch v-model="layoutStore.searchNudging" />
+        </UFormField>
       </div>
 
       <UIDivider v-if="layoutStore.layout !== 'minimal'" />

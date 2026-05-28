@@ -10,6 +10,13 @@ const layoutStore = useLayoutStore();
 const query = ref("");
 const searchId = useId();
 const open = ref(false);
+const focused = ref(false);
+const animatedPlaceholder = ref(item.search.placeholder);
+const preferredMotion = usePreferredReducedMotion();
+let placeholderTimer: ReturnType<typeof setTimeout> | undefined;
+let suggestionIndex = 0;
+let characterIndex = 0;
+let deleting = false;
 
 const filteredSuggestions = computed(() => {
   const suggestions = item.search.suggestions ?? [];
@@ -65,6 +72,68 @@ const searchInputNuxtSize = computed(() => {
   }
 });
 
+const clearPlaceholderTimer = () => {
+  if (!placeholderTimer) return;
+
+  clearTimeout(placeholderTimer);
+  placeholderTimer = undefined;
+};
+
+const startPlaceholderAnimation = () => {
+  const suggestions = item.search.suggestions ?? [];
+
+  if (
+    !layoutStore.searchNudging ||
+    preferredMotion.value === "reduce" ||
+    focused.value ||
+    query.value.trim() ||
+    !suggestions.length
+  ) {
+    animatedPlaceholder.value = item.search.placeholder;
+    return;
+  }
+
+  const tick = () => {
+    const suggestion = suggestions[suggestionIndex] ?? "";
+
+    animatedPlaceholder.value = suggestion.slice(0, characterIndex);
+
+    if (!deleting && characterIndex < suggestion.length) {
+      characterIndex += 1;
+      placeholderTimer = setTimeout(tick, 85);
+      return;
+    }
+
+    if (!deleting && characterIndex === suggestion.length) {
+      deleting = true;
+      placeholderTimer = setTimeout(tick, 1300);
+      return;
+    }
+
+    if (deleting && characterIndex > 0) {
+      characterIndex -= 1;
+      placeholderTimer = setTimeout(tick, 35);
+      return;
+    }
+
+    deleting = false;
+    suggestionIndex = (suggestionIndex + 1) % suggestions.length;
+    placeholderTimer = setTimeout(tick, 300);
+  };
+
+  clearPlaceholderTimer();
+  tick();
+};
+
+const resetPlaceholderAnimation = () => {
+  clearPlaceholderTimer();
+  animatedPlaceholder.value = item.search.placeholder;
+
+  if (!focused.value && !query.value.trim()) {
+    startPlaceholderAnimation();
+  }
+};
+
 const handleSubmit = async () => {
   const searchQuery = query.value.trim();
 
@@ -81,6 +150,35 @@ const handleSubmit = async () => {
 const selectSuggestion = (suggestion: string) => {
   query.value = suggestion;
 };
+
+const handleFocus = () => {
+  focused.value = true;
+  clearPlaceholderTimer();
+  animatedPlaceholder.value = item.search.placeholder;
+};
+
+const handleBlur = () => {
+  focused.value = false;
+  open.value = false;
+  resetPlaceholderAnimation();
+};
+
+const isPlaceholderAnimating = computed(() => {
+  return (
+    layoutStore.searchNudging &&
+    preferredMotion.value !== "reduce" &&
+    !focused.value &&
+    !query.value.trim() &&
+    !!item.search.suggestions?.length
+  );
+});
+
+onMounted(resetPlaceholderAnimation);
+onBeforeUnmount(clearPlaceholderTimer);
+
+watch([preferredMotion, query], resetPlaceholderAnimation);
+
+watch(() => layoutStore.searchNudging, resetPlaceholderAnimation);
 </script>
 
 <template>
@@ -101,7 +199,7 @@ const selectSuggestion = (suggestion: string) => {
         open-on-focus
         ignore-filter
         :items="filteredSuggestions"
-        :placeholder="item.search.placeholder"
+        :placeholder="animatedPlaceholder"
         class="flex-1 h-full w-full"
         :ui="{
           base: 'h-full w-full rounded-2xl bg-(--color-secondary) text-(--color-primary) placeholder:text-(--color-primary) ring-transparent focus-visible:ring-(--color-surface)',
@@ -117,7 +215,8 @@ const selectSuggestion = (suggestion: string) => {
           hideWhenEmpty: true,
         }"
         clear
-        @blur="open = false"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
 
       <UButton
@@ -136,12 +235,21 @@ const selectSuggestion = (suggestion: string) => {
       :aria-labelledby="`${searchId}-shortcuts-label`"
       class="flex flex-wrap justify-center gap-2 list-none mt-4"
     >
-      <li v-for="suggestion in item.search.suggestions" :key="suggestion">
+      <li
+        v-for="(suggestion, index) in item.search.suggestions"
+        :key="suggestion"
+      >
         <UButton
           :label="suggestion"
           type="button"
           variant="soft"
-          class="rounded-full bg-(--color-secondary) text-(--color-primary) hover:bg-(--color-surface) hover:text-(--color-secondary) focus-visible:bg-(--color-surface) focus-visible:text-(--color-secondary)"
+          class="rounded-full bg-(--color-secondary) text-(--color-primary) hover:bg-(--color-surface) hover:text-(--color-secondary) focus-visible:bg-(--color-surface) focus-visible:text-(--color-secondary) transition-colors duration-500 hover:duration-300"
+          :class="
+            (isPlaceholderAnimating && index === suggestionIndex) ||
+            query.trim().toLowerCase() === suggestion.toLowerCase()
+              ? 'bg-(--color-surface) text-(--color-secondary) duration-1000'
+              : ''
+          "
           :aria-label="`Søg efter ${suggestion}`"
           @click="selectSuggestion(suggestion)"
         />

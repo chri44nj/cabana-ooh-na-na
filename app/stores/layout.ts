@@ -8,6 +8,7 @@ export const useLayoutStore = defineStore("layoutStore", {
     spacing: "medium",
     layout: "default",
     showSearch: true,
+    searchNudging: false,
     searchSize: "large",
     contentFirst: true,
     showSecondaryArticle: true,
@@ -24,6 +25,7 @@ export const useLayoutStore = defineStore("layoutStore", {
       this.theme = "forest";
       this.spacing = "medium";
       this.showSearch = true;
+      this.searchNudging = false;
       this.searchSize = "large";
       this.contentFirst = true;
       this.showSecondaryArticle = true;

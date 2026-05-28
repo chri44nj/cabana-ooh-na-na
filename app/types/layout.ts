@@ -23,6 +23,7 @@ export interface LayoutState {
   spacing: HeroSpacing;
   layout: HeroLayout;
   showSearch: boolean;
+  searchNudging: boolean;
   searchSize: HeroSearch;
   contentFirst: boolean;
   showSecondaryArticle: boolean;
