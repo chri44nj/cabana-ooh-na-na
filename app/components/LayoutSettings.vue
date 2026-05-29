@@ -35,6 +35,20 @@ onClickOutside(panel, (event) => {
   layoutStore.settingsVisible = false;
 });
 
+const handleEscape = (event: KeyboardEvent) => {
+  if (event.key !== "Escape") return;
+
+  layoutStore.settingsVisible = false;
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", handleEscape);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleEscape);
+});
+
 const layoutStore = useLayoutStore();
 
 const showContentFirst = computed(() => {
