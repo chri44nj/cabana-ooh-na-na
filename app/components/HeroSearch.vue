@@ -196,7 +196,7 @@ watch(() => layoutStore.searchNudging, resetPlaceholderAnimation);
         v-model="query"
         v-model:open="open"
         autocomplete
-        open-on-focus
+        autofocus
         ignore-filter
         :items="filteredSuggestions"
         :placeholder="animatedPlaceholder"
